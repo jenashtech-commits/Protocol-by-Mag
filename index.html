@@ -90,11 +90,16 @@ footer b{font:500 1.4rem "Cormorant Garamond",serif;letter-spacing:.2em;color:#f
 @keyframes logoin{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
 body.splashing{overflow:hidden;height:100vh}
 @media(prefers-reduced-motion:reduce){#splash img,#splash button{animation:none}#splash{transition:none}}
+#splash{background:radial-gradient(ellipse at center,#5a1a2d 0,#3a0a18 100%)}
+#splash img{display:none}#splash.fb img{display:block}#splash.fb video{display:none}
+#splash video{width:100%;max-height:100%;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse at center,#000 52%,transparent 78%);mask-image:radial-gradient(ellipse at center,#000 52%,transparent 78%)}
+#film video{width:100%;max-width:860px;border-radius:14px;border:1px solid var(--line);background:#3a0a18;margin:26px 0 28px;aspect-ratio:16/9}
+footer a{color:#e8d3a5}
 </style>
 <noscript><style>#splash{display:none}</style></noscript>
 </head>
 <body class="splashing">
-<div id="splash" role="dialog" aria-label="PROTOCOL by Mag"><img src="/icons/logo.jpg" alt="PROTOCOL by Mag" width="800" height="800"><button type="button" id="enter">Enter</button></div>
+<div id="splash" role="dialog" aria-label="PROTOCOL by Mag"><video id="sv" muted playsinline autoplay preload="auto" poster="/media/poster.jpg" aria-label="PROTOCOL by Mag logo animation"><source src="/media/logo-animation.mp4" type="video/mp4"></video><img src="/icons/logo.jpg" alt="PROTOCOL by Mag" width="800" height="800"><button type="button" id="enter">Enter</button></div>
 <nav><div class="wrap"><a class="brand" href="#top">PROTOCOL <i>by Mag</i></a>
 <ul><li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#process">Process</a></li><li><a class="btn" style="padding:8px 20px" href="#enquire">Enquire</a></li><li><button class="btn ghost" id="inst" hidden style="padding:8px 18px">Install app</button></li></ul></div></nav>
 
@@ -130,6 +135,10 @@ body.splashing{overflow:hidden;height:100vh}
 <div class="step"><h3>Celebrate</h3><p>You enjoy the event. We run the protocol behind the scenes.</p></div>
 </div></div></section>
 
+<section id="film" class="band"><div class="wrap" style="text-align:center"><h2>The PROTOCOL signature</h2><p style="color:var(--soft)">Our logo in motion. Follow our events and behind-the-scenes on TikTok.</p>
+<video controls playsinline preload="none" poster="/media/poster-end.jpg"><source src="/media/logo-animation.mp4" type="video/mp4"></video><br>
+<a class="btn" href="https://www.tiktok.com/@protocol.by.mag" target="_blank" rel="noopener">Follow @protocol.by.mag on TikTok</a></div></section>
+
 <div class="quote"><div class="wrap"><p>Flawless is not an accident. It is protocol.</p><small>PROTOCOL BY MAG</small></div></div>
 
 <section id="enquire"><div class="wrap two">
@@ -137,6 +146,7 @@ body.splashing{overflow:hidden;height:100vh}
 <p style="color:var(--soft);margin-bottom:20px">Tell us about your event. Your enquiry opens in WhatsApp or email, ready to send.</p>
 <a href="tel:0550994451">📞 0550994451</a>
 <a href="mailto:protocolbymag@gmail.com">📧 protocolbymag@gmail.com</a>
+<a href="https://www.tiktok.com/@protocol.by.mag" target="_blank" rel="noopener">🎵 TikTok: @protocol.by.mag</a>
 <a href="#enquire">📍 Accra, Ghana</a></div>
 <form id="f">
 <label>Your name<input name="n" required autocomplete="name"></label>
@@ -149,7 +159,7 @@ body.splashing{overflow:hidden;height:100vh}
 <p class="note">Nothing is stored on this page.</p>
 </form></div></section>
 
-<footer><b>PROTOCOL <i style="letter-spacing:0">by Mag</i></b>Beyond Planning. It’s Protocol. · Accra, Ghana<br><span style="opacity:.8">On iPhone: tap Share, then Add to Home Screen to install the app.</span></footer>
+<footer><b>PROTOCOL <i style="letter-spacing:0">by Mag</i></b>Beyond Planning. It’s Protocol. · Accra, Ghana · <a href="https://www.tiktok.com/@protocol.by.mag" target="_blank" rel="noopener">TikTok @protocol.by.mag</a><br><span style="opacity:.8">On iPhone: tap Share, then Add to Home Screen to install the app.</span></footer>
 
 <script>
 const f=document.getElementById('f');
@@ -161,7 +171,12 @@ document.getElementById('em').addEventListener('click',()=>{if(!f.reportValidity
 const app=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 let seen=false;try{seen=!app&&sessionStorage.getItem('pm_seen')==='1'}catch(e){}
 function go(){sp.classList.add('out');b.classList.remove('splashing');try{sessionStorage.setItem('pm_seen','1')}catch(e){}setTimeout(()=>sp.remove(),1000)}
-if(seen){sp.remove();b.classList.remove('splashing')}else{sp.addEventListener('click',go);setTimeout(go,3800)}})();
+if(seen){sp.remove();b.classList.remove('splashing')}else{sp.addEventListener('click',go);
+const v=document.getElementById('sv');let t=setTimeout(go,10000);
+function fb(){sp.classList.add('fb');clearTimeout(t);t=setTimeout(go,3800)}
+v.addEventListener('ended',()=>{clearTimeout(t);t=setTimeout(go,900)});
+v.addEventListener('error',fb);v.querySelector('source').addEventListener('error',fb);
+const p=v.play();if(p&&p.catch)p.catch(fb)}})();
 let dp;const ib=document.getElementById('inst');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;ib.hidden=false});
 ib.addEventListener('click',async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;ib.hidden=true}});
